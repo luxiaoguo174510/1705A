@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "我的购物车";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<CookieTest.Controllers.Goods>
+
+<style>
+    body {
+        padding: 20px 30px;
+    }
+    /*td:nth-of-type(even)*/
+    .search-tabel td:nth-of-type(odd) {
+        text-align: right;
+    }
+
+    .search-tabel > tr > td {
+        border-top-color: #fff;
+    }
+
+    .table > thead > tr > th,
+    .table > tbody > tr > th,
+    .table > tfoot > tr > th,
+    .table > thead > tr > td,
+    .table > tbody > tr > td,
+    .table > tfoot > tr > td {
+    }
+</style>
+
+<div style="text-align:left;font-size:46px;font-weight:600;margin-bottom: 30px;padding-top:50px;"> 购物车结算列表</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>商品ID</td>
+            <td>商品名称</td>
+            <td>图片</td>
+            <td>商品单价</td>
+            <td>商品数量</td>
+            <td>商品总价</td>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@item.ID</td>
+            <td>@item.GoodsTitle</td>
+            <td><img src="@item.GoodsOneImage" style="width:50px;height:50px;" /></td>
+            <td>@(string.Format("{0:C2}", item.CostPrice))</td>
+            <td>@item.CarCount</td>
+            <td>@(string.Format("{0:C2}", item.CostPrice * item.CarCount))</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-default" id="btnClear">立即结算</button>
+<button class="btn btn-default" onclick="javascript: location.href='/goods'">继续购物</button>
+
+<script>
+    $('#btnClear').on('click', function () {
+        $.post('/goods/clearcar', function (data) {
+            console.log('清空购物车：' + data);
+            window.location.href = '/goods';
+        });
+    });
+</script>
+
